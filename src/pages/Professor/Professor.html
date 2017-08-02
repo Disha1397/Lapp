@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Professors Login</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="background">
+  <div class="list card animated bounceInRight">
+  <ion-card >
+    <ion-card-header>
+      LOGIN
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list no-lines>
+
+        <ion-item>
+            <img class="circle" src="../img/logo.jpg" alt="your image">
+        </ion-item>
+
+        <ion-item>
+
+          <ion-label floating>Username</ion-label>
+          <ion-input type="text" name="email" [(ngModel)]="user.email"></ion-input>
+        </ion-item>
+        
+        <ion-item>
+          <ion-label floating>Password</ion-label>
+          <ion-input type="password" name="password" [(ngModel)]="user.password"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <p>Forgot Password ? <a (click)="reset()">Get Your password</a></p>
+        </ion-item>
+        <button ion-button outline block color="danger" id="loginBtn" (click)="login(user)">Login</button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</div>
+</ion-content>
