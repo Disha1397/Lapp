@@ -100,12 +100,12 @@ export class ProfilePage {
       {id: 1, name: 'RMT', year_id: 4, department_id: 1, semester_id:1},
       {id: 2, name: 'CNS', year_id: 4, department_id: 1, semester_id:1},
       {id: 3, name: 'GTA', year_id: 4, department_id: 1, semester_id:1},
-      {id: 4, name: 'CF', year_id: 4, department_id: 1, semester_id:1},
-      {id: 5, name: 'GCC', year_id: 4, department_id: 1, semester_id:1},
-      {id: 6, name: 'AI', year_id: 4, department_id: 1, semester_id:2},
-      {id: 7, name: 'DSP', year_id: 4, department_id: 1, semester_id:2},
-      {id: 8, name: 'MPMC', year_id: 4, department_id: 1, semester_id:2},
-      {id: 9, name: 'PDS', year_id: 4, department_id: 1, semester_id:2}
+      {id: 4, name: 'CF', year_id: 3, department_id: 1, semester_id:1},
+      {id: 5, name: 'GCC', year_id: 3, department_id: 1, semester_id:1},
+      {id: 6, name: 'AI', year_id: 3, department_id: 2, semester_id:1},
+      {id: 7, name: 'DSP', year_id: 3, department_id: 2, semester_id:1},
+      {id: 8, name: 'MPMC', year_id: 3, department_id: 1, semester_id:2},
+      {id: 9, name: 'PDS', year_id: 3, department_id: 1, semester_id:2}
     ];
   }
 
@@ -114,15 +114,24 @@ export class ProfilePage {
 
   }
 
-  setDepartmentValues(sYear) {
-      this.selectedDepartments = this.departments;
+  setDepartmentValues(sYear,sSemester,sDepartment) {
+    if(sSemester!=undefined && sDepartment!=undefined){
+      console.log("boom!")
+      this.setSubjectValues(sYear,sSemester,sDepartment);
+    }
+    console.log("semester value"+sSemester);
+    console.log("department value"+sDepartment);  
+    this.selectedDepartments = this.departments;
+      
 
   }
 
-  setSubjectValues(sDepartment, sYear, sSemester) {
+  setSubjectValues(sYear,sSemester,sDepartment) {
+    if(sSemester!=undefined && sDepartment!=undefined && sYear!=undefined){
       this.selectedSubjects = this.subjects.filter(subject => subject.department_id == sDepartment.id &&
       subject.year_id == sYear.id && subject.semester_id == sSemester.id
       );
+    }
   }
 
   ionViewWillEnter() {

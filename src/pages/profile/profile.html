@@ -29,7 +29,7 @@
 
   <ion-item>
      <ion-label><strong>Year</strong></ion-label>
-     <ion-select (ionChange)="setDepartmentValues(sYear)" [(ngModel)]="sYear">
+     <ion-select (ionChange)="setDepartmentValues(sYear,sSemester,sDepartment)" [(ngModel)]="sYear">
           <ion-option [value]="sYear" *ngFor = "let sYear of years">{{sYear.name}}  </ion-option>
     </ion-select>
     </ion-item>
@@ -38,7 +38,7 @@
 
 <ion-item>
     <ion-label>Semester</ion-label>
-    <ion-select  [(ngModel)]="sSemester" >
+    <ion-select  [(ngModel)]="sSemester" (ionChange)="setSubjectValues(sYear,sSemester,sDepartment)">
       <ion-option [value]="sSemester" *ngFor="let sSemester of semesters ">{{sSemester.name}}</ion-option>
     </ion-select>
   </ion-item>
@@ -48,7 +48,7 @@
 
 <ion-item>
       <ion-label>Department</ion-label>
-      <ion-select (ionChange)="setSubjectValues(sDepartment, sYear, sSemester)" [(ngModel)]="sDepartment">
+      <ion-select (ionChange)="setSubjectValues(sYear,sSemester,sDepartment)" [(ngModel)]="sDepartment">
          <ion-option [value]="sDepartment" *ngFor = "let sDepartment of selectedDepartments">{{sDepartment.name}}</ion-option>
       </ion-select>
  </ion-item>

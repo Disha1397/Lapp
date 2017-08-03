@@ -220,23 +220,31 @@ var ProfilePage = (function () {
             { id: 1, name: 'RMT', year_id: 4, department_id: 1, semester_id: 1 },
             { id: 2, name: 'CNS', year_id: 4, department_id: 1, semester_id: 1 },
             { id: 3, name: 'GTA', year_id: 4, department_id: 1, semester_id: 1 },
-            { id: 4, name: 'CF', year_id: 4, department_id: 1, semester_id: 1 },
-            { id: 5, name: 'GCC', year_id: 4, department_id: 1, semester_id: 1 },
-            { id: 6, name: 'AI', year_id: 4, department_id: 1, semester_id: 2 },
-            { id: 7, name: 'DSP', year_id: 4, department_id: 1, semester_id: 2 },
-            { id: 8, name: 'MPMC', year_id: 4, department_id: 1, semester_id: 2 },
-            { id: 9, name: 'PDS', year_id: 4, department_id: 1, semester_id: 2 }
+            { id: 4, name: 'CF', year_id: 3, department_id: 1, semester_id: 1 },
+            { id: 5, name: 'GCC', year_id: 3, department_id: 1, semester_id: 1 },
+            { id: 6, name: 'AI', year_id: 3, department_id: 2, semester_id: 1 },
+            { id: 7, name: 'DSP', year_id: 3, department_id: 2, semester_id: 1 },
+            { id: 8, name: 'MPMC', year_id: 3, department_id: 1, semester_id: 2 },
+            { id: 9, name: 'PDS', year_id: 3, department_id: 1, semester_id: 2 }
         ];
     };
     ProfilePage.prototype.setPeriod = function (sPeriod) {
         this.selectedPeriods = this.sPeriod;
     };
-    ProfilePage.prototype.setDepartmentValues = function (sYear) {
+    ProfilePage.prototype.setDepartmentValues = function (sYear, sSemester, sDepartment) {
+        if (sSemester != undefined && sDepartment != undefined) {
+            console.log("boom!");
+            this.setSubjectValues(sYear, sSemester, sDepartment);
+        }
+        console.log("semester value" + sSemester);
+        console.log("department value" + sDepartment);
         this.selectedDepartments = this.departments;
     };
-    ProfilePage.prototype.setSubjectValues = function (sDepartment, sYear, sSemester) {
-        this.selectedSubjects = this.subjects.filter(function (subject) { return subject.department_id == sDepartment.id &&
-            subject.year_id == sYear.id && subject.semester_id == sSemester.id; });
+    ProfilePage.prototype.setSubjectValues = function (sYear, sSemester, sDepartment) {
+        if (sSemester != undefined && sDepartment != undefined && sYear != undefined) {
+            this.selectedSubjects = this.subjects.filter(function (subject) { return subject.department_id == sDepartment.id &&
+                subject.year_id == sYear.id && subject.semester_id == sSemester.id; });
+        }
     };
     ProfilePage.prototype.ionViewWillEnter = function () {
         this.tabBarElement.style.display = 'none';
@@ -314,12 +322,12 @@ var ProfilePage = (function () {
     };
     ProfilePage.prototype.markAttendance = function (sYear, sDepartment, sSubject) {
         if ("undefined" === typeof sYear || "undefined" === typeof sDepartment /*|| "undefined" === typeof sSubject*/) {
-            var alert_1 = this.alertCtrl.create({
+            var alert = this.alertCtrl.create({
                 title: 'Insufficient Details',
                 subTitle: 'Please enter all the details',
                 buttons: ['OK']
             });
-            alert_1.present();
+            alert.present();
         }
         else {
             console.log("attendance firered" + sYear.name + sDepartment.name + this.selectedPeriods);
@@ -332,11 +340,12 @@ var ProfilePage = (function () {
 }());
 ProfilePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-profile',template:/*ion-inline-start:"E:\Work\Mini Project\Lapp\src\pages\profile\profile.html"*/'<!--\n  Generated template for the ProfilePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar color="primary">\n        <ion-title>Profile page</ion-title>\n    <ion-buttons right color="danger">\n      <button ion-button (click)="logout()">Logout</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n	<ion-list>\n		<ion-item>\n			<ion-label>Username:{{(profiledetails|async)?.fname}}</ion-label>\n		</ion-item>\n\n  <ion-item>\n    <ion-label>Period No</ion-label>\n    <ion-select (ionChange)="setPeriod(sPeriod)" [(ngModel)]="sPeriod"  multiple="true">\n      <ion-option *ngFor="let period of periods()">{{period}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n  <ion-item>\n     <ion-label><strong>Year</strong></ion-label>\n     <ion-select (ionChange)="setDepartmentValues(sYear)" [(ngModel)]="sYear">\n          <ion-option [value]="sYear" *ngFor = "let sYear of years">{{sYear.name}}  </ion-option>\n    </ion-select>\n    </ion-item>\n\n\n\n<ion-item>\n    <ion-label>Semester</ion-label>\n    <ion-select  [(ngModel)]="sSemester" >\n      <ion-option [value]="sSemester" *ngFor="let sSemester of semesters ">{{sSemester.name}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n\n\n\n<ion-item>\n      <ion-label>Department</ion-label>\n      <ion-select (ionChange)="setSubjectValues(sDepartment, sYear, sSemester)" [(ngModel)]="sDepartment">\n         <ion-option [value]="sDepartment" *ngFor = "let sDepartment of selectedDepartments">{{sDepartment.name}}</ion-option>\n      </ion-select>\n </ion-item>\n\n\n\n\n\n  <ion-item >\n    <ion-label> Subject </ion-label>\n      <ion-select [(ngModel)]="sSubject" >\n        <ion-option [value]="sSubject" *ngFor="let sSubject of selectedSubjects" >{{sSubject.name}}</ion-option>\n      </ion-select>\n\n  </ion-item>\n\n\n\n  <button ion-button color="dark" outline (click)="markAttendance(sYear,sDepartment,sSubject)">\n    MARK ATTENDANCE</button><br>\n </ion-list>\n</ion-content>\n'/*ion-inline-end:"E:\Work\Mini Project\Lapp\src\pages\profile\profile.html"*/,
+        selector: 'page-profile',template:/*ion-inline-start:"E:\Work\Mini Project\Lapp\src\pages\profile\profile.html"*/'<!--\n  Generated template for the ProfilePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar color="primary">\n        <ion-title>Profile page</ion-title>\n    <ion-buttons right color="danger">\n      <button ion-button (click)="logout()">Logout</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content padding>\n	<ion-list>\n		<ion-item>\n			<ion-label>Username:{{(profiledetails|async)?.fname}}</ion-label>\n		</ion-item>\n\n  <ion-item>\n    <ion-label>Period No</ion-label>\n    <ion-select (ionChange)="setPeriod(sPeriod)" [(ngModel)]="sPeriod"  multiple="true">\n      <ion-option *ngFor="let period of periods()">{{period}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n  <ion-item>\n     <ion-label><strong>Year</strong></ion-label>\n     <ion-select (ionChange)="setDepartmentValues(sYear,sSemester,sDepartment)" [(ngModel)]="sYear">\n          <ion-option [value]="sYear" *ngFor = "let sYear of years">{{sYear.name}}  </ion-option>\n    </ion-select>\n    </ion-item>\n\n\n\n<ion-item>\n    <ion-label>Semester</ion-label>\n    <ion-select  [(ngModel)]="sSemester" (ionChange)="setSubjectValues(sYear,sSemester,sDepartment)">\n      <ion-option [value]="sSemester" *ngFor="let sSemester of semesters ">{{sSemester.name}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n\n\n\n<ion-item>\n      <ion-label>Department</ion-label>\n      <ion-select (ionChange)="setSubjectValues(sYear,sSemester,sDepartment)" [(ngModel)]="sDepartment">\n         <ion-option [value]="sDepartment" *ngFor = "let sDepartment of selectedDepartments">{{sDepartment.name}}</ion-option>\n      </ion-select>\n </ion-item>\n\n\n\n\n\n  <ion-item >\n    <ion-label> Subject </ion-label>\n      <ion-select [(ngModel)]="sSubject" >\n        <ion-option [value]="sSubject" *ngFor="let sSubject of selectedSubjects" >{{sSubject.name}}</ion-option>\n      </ion-select>\n\n  </ion-item>\n\n\n\n  <button ion-button color="dark" outline (click)="markAttendance(sYear,sDepartment,sSubject)">\n    MARK ATTENDANCE</button><br>\n </ion-list>\n</ion-content>\n'/*ion-inline-end:"E:\Work\Mini Project\Lapp\src\pages\profile\profile.html"*/,
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* ToastController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */], __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* ToastController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */]) === "function" && _f || Object])
 ], ProfilePage);
 
+var _a, _b, _c, _d, _e, _f;
 //# sourceMappingURL=profile.js.map
 
 /***/ }),
@@ -550,13 +559,13 @@ var AttendancePage = (function () {
         else {
             this.presentArray.splice(this.presentArray.indexOf(test), 1);
         }
-        console.log("present array is" + this.presentArray);
         //console.log("absent array is"+this.absentArray);
     };
     AttendancePage.prototype.confirmAttendance = function () {
         var _this = this;
         this.absentArray = this.regNo.filter(function (item) { return _this.presentArray.indexOf(item) < 0; });
-        console.log("absentees are" + this.absentArray);
+        console.log("present array is" + this.presentArray);
+        console.log("absent array is" + this.absentArray);
     };
     AttendancePage.prototype.ionViewWillEnter = function () {
         this.tabBarElement.style.display = 'none';
@@ -573,10 +582,9 @@ AttendancePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-attendance',template:/*ion-inline-start:"E:\Work\Mini Project\Lapp\src\pages\attendance\attendance.html"*/'<!--\n  Generated template for the AttendancePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Attendance: {{this.dept}}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n  <ion-list>\n    <ion-item *ngFor = "let regNo of regNo; let i = index" >\n      <ion-label> {{regNo}} {{name[i]}}  </ion-label>\n      <ion-checkbox [(ngModel)] = "attendanceArray[i]" (ionChange)="markAttendance(regNo,attendanceArray[i])" checked="true">  </ion-checkbox>\n    </ion-item>\n  </ion-list>\n\n  <ion-item>\n     <button ion-button type="button" (click)="confirmAttendance()">Confirm Attendance</button>\n   </ion-item>\n\n</ion-content>\n'/*ion-inline-end:"E:\Work\Mini Project\Lapp\src\pages\attendance\attendance.html"*/,
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__["a" /* AngularFireDatabase */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */]) === "function" && _e || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* NavParams */], __WEBPACK_IMPORTED_MODULE_3_angularfire2_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__["a" /* AngularFireDatabase */], __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */]])
 ], AttendancePage);
 
-var _a, _b, _c, _d, _e;
 //# sourceMappingURL=attendance.js.map
 
 /***/ }),
